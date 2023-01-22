@@ -2,12 +2,12 @@ SELECT *
 FROM department
 ORDER BY name ASC
 
-SELECT department_id, title, department.name as name, salary
+SELECT department_id, title, department.name AS name, salary
 FROM role INNER JOIN department ON role.department_id = department.id;
 
-
- SELECT department_id, name, first_name, last_name, manager
- FROM department, employee, role
-inner join  department ,role ,employee
-
-SELECT * FROM employee
+SELECT department_id, title, department.name AS name
+FROM department
+RIGHT JOIN role
+ON department.department_id = role.role.id
+INNER JOIN employee
+ON department.department_id = employee.id;
