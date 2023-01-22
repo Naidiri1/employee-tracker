@@ -1,5 +1,8 @@
 const inquirer = require("inquirer");
 const cTable = require('console.table');
+//format table
+//using npm install console.table --save
+//bower install console.table --save
 console.table([
     {
       name: 'foo',
@@ -11,7 +14,7 @@ console.table([
   ]);
   
 
-
+// first prompt for the user 
 const options =  [
      {
     type: 'list',
@@ -29,7 +32,7 @@ const options =  [
     ]
 },
 ]
-
+// to check on each option 
 function optionsPrompt(){
     inquirer
     .prompt(options)
@@ -72,10 +75,11 @@ if (response.teamMembers ===  "Add department"){
 if (response.teamMembers ===  "Quit"){
     //close terminal  
 }
+})}
 
- })
-}
 
+
+// questions for some options like:
  const addDepartment = [
     {
         type: "input",
