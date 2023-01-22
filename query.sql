@@ -11,3 +11,5 @@ RIGHT JOIN role
 ON department.department_id = role.role.id
 INNER JOIN employee
 ON department.department_id = employee.id;
+
+SELECT * FROM department, role, employee
