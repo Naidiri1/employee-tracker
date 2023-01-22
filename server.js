@@ -17,7 +17,7 @@ const db = mysql.createConnection(
     // MySQL username,
     user: 'root',
     // TODO: Add MySQL password here
-    password: 'iridian',
+    password: 'password',
     database: 'manager_db'
   },
   console.log(`Connected to manager_db database.`)
@@ -40,6 +40,23 @@ app.post('/api/new-department', ({ body }, res) => {
     });
   });
 });
+
+
+// Read list of all roles associated with department
+app.get('/api/department', (req, res) => {
+  const sql = `SELECT id, department_name AS title from department;`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'success',
+      data: rows
+    });
+  });
+});
+
 // Delete a department
 app.delete('/api/department/:id', (req, res) => {
   const sql = `DELETE FROM departments WHERE id = ?`;
@@ -61,23 +78,7 @@ app.delete('/api/department/:id', (req, res) => {
     }
   });
 });
-
-// Read list of all reviews and associated movie name using LEFT JOIN
-app.get('/api/department-roles', (req, res) => {
-  const sql = `SELECT roles.role_name AS role;`;
-  db.query(sql, (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'success',
-      data: rows
-    });
-  });
-});
-
-// Read all departments
+// Read all departments and roles 
 app.get('/api/departments', (req, res) => {
   const sql = `SELECT id, department_name AS title FROM departments`;
   

@@ -3,23 +3,27 @@ CREATE DATABASE manager_db;
 
 USE manager_db;
 
-CREATE TABLE departments(
+CREATE TABLE department(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  department_name VARCHAR(30) NOT NULL
+  name VARCHAR(30) NOT NULL
 );
 
-CREATE TABLE roles(
+CREATE TABLE role(
  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
- id_department INT,
+ department_id INT,
  title VARCHAR(30) NOT NULL,
  salary INT,
- FOREIGN KEY (id_department) REFERENCES departments(id)
+ FOREIGN KEY (department_id) REFERENCES department(id)
  ON DELETE SET NULL
  );
 
-CREATE TABLE employees(
+CREATE TABLE employee(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  department_id INT,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
   manager VARCHAR(30),
+  FOREIGN KEY (department_id) REFERENCES department(id)
+ ON DELETE SET NULL
 );
+

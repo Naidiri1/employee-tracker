@@ -86,7 +86,9 @@ if (response.teamMembers ===  "Quit"){
         name: "department",
         message: "What is the name of the department?"
     }
+    
  ]
+ return "Added to the database"
  
  const addRole = [
     {
