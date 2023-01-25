@@ -3,13 +3,11 @@ CREATE DATABASE manager_db;
 
 USE manager_db;
 
---department table 
 CREATE TABLE department(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(30) NOT NULL
 );
 
--- role table 
 CREATE TABLE role(
  role_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  department_id INT,
@@ -19,7 +17,6 @@ CREATE TABLE role(
  ON DELETE SET NULL
  );
 
--- employee table 
 CREATE TABLE employee(
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   role_id INT UNSIGNED,
