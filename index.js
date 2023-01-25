@@ -1,155 +1,308 @@
 const inquirer = require("inquirer");
-const cTable = require('console.table');
+const cTable = require("console.table");
+
+const mysql = require("mysql2");
+const { response } = require("express");
+
 //format table
 //using npm install console.table --save
 //bower install console.table --save
-console.table([
-    {
-      name: 'foo',
-      age: 10
-    }, {
-      name: 'bar',
-      age: 20
-    }
-  ]);
-  
 
-// first prompt for the user 
-const options =  [
-     {
-    type: 'list',
-    name: 'teamMembers',
+const db = mysql.createConnection(
+  {
+    host: "localhost",
+    // MySQL username,
+    user: "root",
+    // TODO: Add MySQL password here
+    password: "password",
+    database: "manager_db",
+  },
+  console.log(`Connected to manager_db database.`)
+);
+
+// first prompt for the user
+const options = [
+  {
+    type: "list",
+    name: "teamMembers",
     message: " What would you like to do?",
     choices: [
-        "View All Employees", 
-        "Add Employee", 
-        "Update Employee Role", 
-        "View all Roles", 
-        "Add Role", 
-        "View All Departments", 
-        "Add department", 
-        "Quit"
-    ]
-},
-]
-// to check on each option 
-function optionsPrompt(){
-    inquirer
+      "View All Employees",
+      "Add Employee",
+      "Update Employee Role",
+      "View all Roles",
+      "Add Role",
+      "View All Departments",
+      "Add department",
+      "Quit",
+    ],
+  },
+];
+// to check on each option
+function optionsPrompt() {
+  inquirer
     .prompt(options)
     // prompt for if they want to build an engineer, intern, or build team
     .then((response) => {
-        console.log(response)
-// if the user choose from the options "View All Employees",
-if (response.teamMembers === "View All Employees"){
-    //show data of employees
- }
-// if the user choose from the options "Add employee",
-if (response.teamMembers === "Add employee"){
-    //add employee 
- }
+    //   console.log(response);
+      // if the user choose from the options "View All Employees",
+      if (response.teamMembers === "View All Employees") {
+        //show data of employees
+        viewEmployees();
+      }
+      // if the user choose from the options "Add employee",
+      if (response.teamMembers === "Add Employee") {
+        //add employee
+        addEmployee();
+      }
 
- // if the user choose from the options "Update Employee Role" ,
-if (response.teamMembers === "Update Employee Role"){
-    //update employee in table 
- }
+      // if the user choose from the options "Update Employee Role" ,
+      if (response.teamMembers === "Update Employee Role") {
+        //update employee in table
+        updateEmployee();
+      }
 
-// if the user choose from the options "View all Roles",
-if (response.teamMembers ===  "View all Roles"){
-    //show data of roles
+      // if the user choose from the options "View all Roles",
+      if (response.teamMembers === "View all Roles") {
+        //show data of roles
+        viewRole();
+      }
+
+      // if the user choose from the options "Add Role",
+      if (response.teamMembers === "Add Role") {
+        //add role in roles table
+        addRole();
+      }
+      // if the user choose from the options 'View All Departments'
+      if (response.teamMembers === "View All Departments") {
+        //show data of departments
+        viewDepartment();
+      }
+
+      // if the user choose from the options Add department",
+      if (response.teamMembers === "Add department") {
+        //add department in table
+        addDepart();
+      }
+      // if the user choose from the options "Quit",
+      if (response.teamMembers === "Quit") {
+        //close terminal
+        process.exit();
+      }
+    });
 }
 
-// if the user choose from the options "Add Role",
-if (response.teamMembers ===  "Add Role"){
-    //add role in roles table 
-}
-// if the user choose from the options 'View All Departments'
-if (response.teamMembers === 'View All Departments'){
-   //show data of departments
-}
-
-// if the user choose from the options Add department",
-if (response.teamMembers ===  "Add department"){
-    //add department in table 
-}
-// if the user choose from the options "Quit",
-if (response.teamMembers ===  "Quit"){
-    //close terminal  
-}
-})}
-
-
-
-// questions for some options like:
- const addDepartment = [
-    {
-        type: "input",
-        name: "department",
-        message: "What is the name of the department?"
+function viewDepartment() {
+  db.query("SELECT * FROM department;", (err, res) => {
+    if (err) {
+      console.log(err);
     }
-    
- ]
- return "Added to the database"
- 
- const addRole = [
-    {
-        type: "input",
-        name:"role",
-        message: "What is the name of the role?"
-    },
-    {
-        type: "input",
-        name:"roleSalary",
-        message: "What is the salary of the role?"
-    },
-    {
-        type: "list",
-        name:"roleDepartment",
-        message: "Which department does the role belong to?",
-        choices: ["Engineering", "Finance", "Sales", "Services"]
-   //choices roles.data
-    }
- ]
+    console.table(res);
+    optionsPrompt();
+  });
+}
 
-const addEmployee =
-    [
-       {
+function viewRole() {
+  db.query(
+    "SELECT department_id, title, department.name AS name, salary FROM role INNER JOIN department ON role.department_id = department.id;",
+    (err, res) => {
+      if (err) {
+        console.log(err);
+      }
+      console.table(res);
+      optionsPrompt();
+    }
+  );
+}
+
+function viewEmployees() {
+  db.query(
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title AS title, department.name AS department, role.salary AS salary, manager.first_name AS manager FROM employee LEFT JOIN role ON employee.role_id = role.role_id LEFT JOIN employee manager ON employee.manager_id = manager.id LEFT JOIN department ON role.department_id = department.id;",
+    (err, res) => {
+      if (err) {
+        console.log(err);
+      }
+      console.table(res);
+      optionsPrompt();
+    }
+  );
+}
+function addDepart() {
+  inquirer
+    .prompt(addDepartment)
+    // prompt for if they want to build an engineer, intern, or build team
+    .then((response) => {
+      console.log(response);
+      db.query(
+        "INSERT INTO department (name) VALUES (?)",
+        response.department,
+        (err, res) => {
+          if (err) {
+            console.log(err);
+          }
+          console.table(res);
+          optionsPrompt();
+        }
+      );
+    });
+}
+
+function addRole() {
+  db.query(
+    "SELECT department.id, department.name FROM department;",
+    (err, res) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log("Showing Available Departments...");
+      console.table(res);
+      let departmentIds = res;
+      let ids = [];
+      departmentIds.forEach((id) => {
+        ids.push(id.id);
+      });
+      inquirer
+        .prompt([
+          {
             type: "input",
-            name: "employeeName",
-            message: "What is the employee's name?"
-        },
-        {
+            name: "title",
+            message: "What is the name of the role?",
+          },
+          {
             type: "input",
-            name: "employeeLastName",
-            message: "What is the employee's last name?"
-        },
-        {
+            name: "salary",
+            message: "What is the salary of the role?",
+          },
+          {
             type: "list",
-            name: "employeeRole",
-            message: "What is the employee's role?",
-            choices:["Sales Lead", "SAles Person", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawyer"]
-        }, 
-        {
-            type: "input",
-            name: "employeesManager",
-            message: "Who is the employee's manager?",
-            choices:["None", "Michael Brown", "Tom Perez", "Ernesto Sanchez", "Karla Potts"]
-        },
-       // return optionsPrompt()
-     ]
-
-const updateEmployee =[
-    {
-        type: "list",
-        name: "updateEmployee",
-        message: "Which employee's role do you want to update?",
-      // choices: [employees.data]
-    },
-    {
-        type: "list",
-        name: "updateRole",
-        message: "Which role do you want to assign to the selected employee?",
-      // choices: [roles.data]
+            name: "department_id",
+            message: "Which department does the role belong to?",
+            choices: ids,
+          },
+        ])
+        // prompt for if they want to build an engineer, intern, or build team
+        .then((response) => {
+          console.log(response);
+          db.query("INSERT INTO role SET ?", response, (err, res) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log("Role created!");
+            optionsPrompt();
+          });
+        });
     }
-]
+  );
+}
 
- optionsPrompt();
+function addEmployee() {
+  db.query("SELECT role_id, title FROM role", (err, res) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log("Showing Roles...");
+    console.table(res);
+    let roleIds = res;
+    let ids = [];
+    roleIds.forEach((id) => {
+      ids.push(id.role_id);
+    });
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "first_name",
+          message: "What is the employee's name?",
+        },
+        {
+          type: "input",
+          name: "last_name",
+          message: "What is the employee's last name?",
+        },
+        {
+          type: "list",
+          name: "role_id",
+          message: "What is the employee's role?",
+          choices: ids,
+        },
+      ])
+      .then((response) => {
+        console.log(response);
+        db.query("INSERT INTO employee SET ?", response, (err, res) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log("employee created!");
+          optionsPrompt();
+        });
+      });
+  });
+}
+
+function updateEmployee() {
+  // Show all employees id, first name, last name
+  db.query("SELECT employee.id, employee.first_name, employee.last_name FROM employee;", (err, res) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log("Showing Employees...");
+    console.table(res);
+    let ids = [];
+    res.forEach((employee) => {
+      ids.push(employee.id);
+    });
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "id",
+          message: "Which employee's role do you want to update?",
+          choices: ids,
+        },
+      ])
+      .then((response) => {
+        let employeeID = response.id;
+        // show all role id and title
+        db.query("SELECT role_id, title FROM role", (err, res) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log("Showing Roles...");
+          console.table(res);
+          let roleIds = res;
+          let ids = [];
+          roleIds.forEach((id) => {
+            ids.push(id.role_id);
+          });
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "role_id",
+                message:
+                  "Which role do you want to assign to the selected employee?",
+                choices: ids,
+              },
+            ])
+            .then((response) => {
+              console.log(response);
+              db.query(
+                "UPDATE employee SET role_id = ? WHERE id = ?;",[
+                  response.role_id, employeeID
+                ],
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  console.log("Employee Updated!");
+                  optionsPrompt();
+                }
+              );
+            });
+        });
+      });
+  });
+}
+
+optionsPrompt();
+
