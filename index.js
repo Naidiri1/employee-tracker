@@ -38,7 +38,7 @@ function optionsPrompt() {
     .prompt(options)
     // prompt for if they want to build an engineer, intern, or build team
     .then((response) => {
-      //   console.log(response);
+      
       // if the user choose from the options "View All Employees",
       if (response.teamMembers === "View All Employees") {
         //show data of employees

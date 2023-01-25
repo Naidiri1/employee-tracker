@@ -33,9 +33,9 @@ table of contents
 Then the user chooses based on the options and he will be able to use CRUD to modify the data. Also there will be questions for the user to write like "What is the name of the role?", "What is the salary of the role?". 
 Once the user has finished the options 'quit' will close the app and save the changes from the user.
 
-- screenshot of the command line ![screenshot of the html]()
-- sample of the data stored ![Sample of webpage]()
-- sample of the command line ![sample of the command line]()
+- screenshot of the command line ![screenshot of the command line](./ims%20for%20readme%20file/command-line.jpg)
+- sample of the data stored ![screenshot of the data in tables](./ims%20for%20readme%20file/command-line1.jpg)
+- sample of the command line ![screenshot of adding employee](./ims%20for%20readme%20file/examplecommand-line%20.jpg)
 
 - Video link of the app employee-tracker [Video of the app using the command line ]()
 
