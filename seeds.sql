@@ -1,3 +1,4 @@
+-- Adding data to department table 
 INSERT INTO department (name)
 VALUES 
 ("Engineering"),
@@ -5,6 +6,7 @@ VALUES
 ("Legal"),
 ("Sales");
 
+--Adding data to role table 
 INSERT INTO role (department_id, title, salary)
 VALUES 
 (4, "Sales Lead", 100000),
@@ -16,6 +18,7 @@ VALUES
 (3, "Legal Team Lead", 250000),
 (3, "Lawyer", 190000);
 
+-- Adding data to employee table
 INSERT INTO employee (role_id, first_name, last_name, manager_id)
 VALUES
 (1, "Michale", "Brown", NULL),
