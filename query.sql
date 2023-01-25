@@ -1,7 +1,7 @@
 --department table 
 SELECT * 
 FROM department
-ORDER BY name ASC;
+ORDER BY name ASC
 
 -- salary table 
 SELECT department_id, title, department.name AS name, salary

@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const { response } = require("express");
+const {response} = require("express");
 
 const db = mysql.createConnection(
   {
@@ -122,9 +122,17 @@ function viewEmployees() {
     }
   );
 }
+
 // Adding function to add a department in department table
+const addDepartment= [
+  {
+    type: "input",
+    name: "department",
+    message: "What is the name of the department?",
+  }]
 function addDepart() {
-  inquirer.prompt(addDepartment).then((response) => {
+  inquirer.prompt(addDepartment)
+  .then((response) => {
     console.log(response);
     db.query(
       "INSERT INTO department (name) VALUES (?)",
@@ -133,7 +141,7 @@ function addDepart() {
         if (err) {
           console.log(err);
         }
-        console.table(res);
+        console.log("department added!");
         optionsPrompt();
       }
     );

@@ -37,10 +37,7 @@ Once the user has finished the options 'quit' will close the app and save the ch
 - sample of the data stored ![screenshot of the data in tables](./ims%20for%20readme%20file/command-line1.jpg)
 - sample of the command line ![screenshot of adding employee](./ims%20for%20readme%20file/examplecommand-line%20.jpg)
 
-- Video link of the app employee-tracker [Video of the app using the command line ]()
-
-
-
+- Video link of the app employee-tracker [Video of the app using the command line ](https://app.castify.com/view/525fbc18-1554-4f6e-b3fe-fabfcd0ead7d)
 
 ## Credits 
 
